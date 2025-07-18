@@ -51,7 +51,7 @@ stage('Deploy via Ansible Node') {
             sh """
             ssh -i ${ANSIBLE_KEY} -o StrictHostKeyChecking=no ansible_user@192.168.56.212 '
                 if [ ! -d /home/ansible/project ]; then
-                    git clone https://github.com/dipen674/Node-JS.git /home/ansible/project
+                   git clone --single-branch --branch develop https://github.com/dipen674/Node-JS.git /home/ansible/project
                 else
                     cd /home/ansible/project && git pull
                 fi
