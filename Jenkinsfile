@@ -50,13 +50,13 @@ stage('Deploy via Ansible Node') {
         )]) {
             sh """
             ssh -i ${ANSIBLE_KEY} -o StrictHostKeyChecking=no ansible_user@192.168.56.212 '
-                if [ ! -d /home/ansible/project ]; then
-                   git clone --single-branch --branch develop https://github.com/dipen674/Node-JS.git /home/ansible/project
+                if [ ! -d /home/vagrant/project ]; then
+                   git clone --single-branch --branch develop https://github.com/dipen674/Ansible_Project.gi /home/vagrant/project
                 else
-                    cd /home/ansible/project && git pull
+                    cd /home/vagrant/project && git pull
                 fi
 
-                cd /home/ansible/project/ansible &&
+                cd /home/vagrant/project/ansible &&
                 ansible-playbook deploy-playbook.yaml -i inventory.ini -e "build_number=${BUILD_NUMBER}"
             '
             """
