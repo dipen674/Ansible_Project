@@ -41,7 +41,7 @@ pipeline {
                 }
             }
         }
-stage('Deploy via Ansible Node') {
+    stage('Deploy via Ansible Node') {
     agent { label 'master' }
     steps {
         withCredentials([sshUserPrivateKey(
@@ -49,21 +49,21 @@ stage('Deploy via Ansible Node') {
             keyFileVariable: 'ANSIBLE_KEY'
         )]) {
             sh """
-            ssh -i //var/lib/jenkins/keys/id_rsa -o StrictHostKeyChecking=no vagrant@192.168.56.210
-            sudo su
+            ssh -i "/var/lib/jenkins/keys/id_rsa" -o StrictHostKeyChecking=no vagrant@192.168.56.210 '
                 if [ ! -d /home/vagrant/project ]; then
-                   git clone --single-branch --branch develop https://github.com/dipen674/Ansible_Project.git /home/vagrant/project
+                    sudo -u vagrant mkdir -p /home/vagrant/project
+                    sudo -u vagrant git clone --single-branch --branch develop https://github.com/dipen674/Ansible_Project.git /home/vagrant/project
                 else
-                    cd /home/vagrant/project && git pull
+                    cd /home/vagrant/project && sudo -u vagrant git pull
                 fi
-
+                
                 cd /home/vagrant/project/ansible &&
-                ansible-playbook deploy-playbook.yaml -i inventory.ini -e "build_number=${BUILD_NUMBER}"
+                sudo -u vagrant ansible-playbook deploy-playbook.yaml -i inventory.ini -e "build_number=${BUILD_NUMBER}"
             '
             """
-            }
         }
     }
+}
 }
     }
     // post {
