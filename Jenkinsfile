@@ -50,6 +50,7 @@ stage('Deploy via Ansible Node') {
         )]) {
             sh """
             ssh -i //var/lib/jenkins/keys/id_rsa -o StrictHostKeyChecking=no vagrant@192.168.56.210
+            sudo su
                 if [ ! -d /home/vagrant/project ]; then
                    git clone --single-branch --branch develop https://github.com/dipen674/Ansible_Project.git /home/vagrant/project
                 else
