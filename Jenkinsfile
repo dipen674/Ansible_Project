@@ -49,9 +49,9 @@ stage('Deploy via Ansible Node') {
             keyFileVariable: 'ANSIBLE_KEY'
         )]) {
             sh """
-            ssh -i ${ANSIBLE_KEY} -o StrictHostKeyChecking=no ansible_user@192.168.56.212 '
+            ssh -i /home/vagrant/.ssh/id_rsa -o StrictHostKeyChecking=no ansible_user@192.168.56.212
                 if [ ! -d /home/vagrant/project ]; then
-                   git clone --single-branch --branch develop https://github.com/dipen674/Ansible_Project.gi /home/vagrant/project
+                   git clone --single-branch --branch develop https://github.com/dipen674/Ansible_Project.git /home/vagrant/project
                 else
                     cd /home/vagrant/project && git pull
                 fi
