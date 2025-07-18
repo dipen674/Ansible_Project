@@ -42,7 +42,7 @@ pipeline {
             }
         }
 stage('Deploy via Ansible Node') {
-    agent { label 'production' }
+    agent { label 'master' }
     steps {
         withCredentials([sshUserPrivateKey(
             credentialsId: 'ansible-ssh-key',
