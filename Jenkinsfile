@@ -41,22 +41,29 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Application') {
-            steps {
-                dir('ansible') {
-                    withCredentials([sshUserPrivateKey(
-                        credentialsId: 'deployment-ssh-key',
-                        keyFileVariable: 'SSH_KEY'
-                    )]) {
-                        sh """
-                        ansible-playbook deploy-playbook.yml \
-                          -e "build_number=${BUILD_NUMBER}" \
-                          --private-key ${SSH_KEY}
-                        """
-                    }
-                }
+stage('Deploy via Ansible Node') {
+    agent { label 'production' }
+    steps {
+        withCredentials([sshUserPrivateKey(
+            credentialsId: 'ansible-ssh-key',
+            keyFileVariable: 'ANSIBLE_KEY'
+        )]) {
+            sh """
+            ssh -i ${ANSIBLE_KEY} -o StrictHostKeyChecking=no ansible_user@192.168.56.212 '
+                if [ ! -d /home/ansible/project ]; then
+                    git clone https://github.com/dipen674/Node-JS.git /home/ansible/project
+                else
+                    cd /home/ansible/project && git pull
+                fi
+
+                cd /home/ansible/project/ansible &&
+                ansible-playbook deploy-playbook.yaml -i inventory.ini -e "build_number=${BUILD_NUMBER}"
+            '
+            """
             }
         }
+    }
+}
     }
     post {
             always {
