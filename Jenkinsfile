@@ -9,7 +9,7 @@ pipeline {
         stage('Write Frontend .env in production environment') {
             agent { label 'production' }
             steps {
-                writeFile file: './FrontEnd/.env', text: "REACT_APP_API_URL=http://192.168.56.152:5000"
+                writeFile file: './FrontEnd/.env', text: "REACT_APP_API_URL=http://192.168.56.212:5000"
                 sh "cat ./FrontEnd/.env"
             }
         }
