@@ -56,7 +56,7 @@ pipeline {
                 else
                     cd /home/vagrant/project && sudo -u vagrant git pull
                 fi
-                
+                source /home/vagrant/myenv/bin/activate
                 cd /home/vagrant/project/ansible &&
                 sudo -u vagrant ansible-playbook deploy-playbook.yaml -i inventory.ini -e "build_number=${BUILD_NUMBER}"
             '
