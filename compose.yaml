@@ -1,0 +1,40 @@
+services:
+  frontend:
+    image: "${FRONTEND_IMAGE}"
+    ports:
+      - "3000:80"
+    # env_file:
+    #   - ./FrontEnd/.env
+    networks:
+      - mynetwork
+
+  backend:
+    image: "${BACKEND_IMAGE}"  
+    depends_on:
+      - mongodb
+    # env_file:
+    #   - ./BackEnd/config.env
+    ports:
+      - "5000:5000"
+    networks:
+      - mynetwork
+
+  mongodb:
+    image: mongo:4.4
+    command: [--bind_ip_all]
+    volumes:
+      - mongo-data:/data/db
+
+    healthcheck:
+      test: mongo --eval "db.adminCommand('ping')"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - mynetwork
+
+volumes:
+  mongo-data:
+
+networks:
+  mynetwork:
