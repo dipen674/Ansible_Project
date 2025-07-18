@@ -1,0 +1,32 @@
+---
+- name: Ensure workspace directory exists
+  file:
+    path: "{{ workspace }}"
+    state: directory
+    mode: 0755
+
+- name: Copy Docker compose file
+  copy:
+    src: "../../compose.yaml"
+    dest: "{{ workspace }}/{{ compose_file }}"
+
+- name: Create environment file
+  template:
+    src: "compose.env.j2"
+    dest: "{{ workspace }}/{{ env_file }}"
+
+- name: Pull latest images
+  command: "docker compose --env-file {{ env_file }} pull"
+  args:
+    chdir: "{{ workspace }}"
+
+- name: Deploy application
+  command: "docker compose --env-file {{ env_file }} up -d"
+  args:
+    chdir: "{{ workspace }}"
+
+- name: Verify frontend health
+  wait_for:
+    host: localhost
+    port: 3000
+    timeout: 60

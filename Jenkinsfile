@@ -41,34 +41,20 @@ pipeline {
                 }
             }
         }
-        stage('Preparing compose.env file for docker-compose.yaml ') {
-            agent {label "deployment"}
+        stage('Deploy Application') {
             steps {
-                script {
-            writeFile file: 'compose.env', text: """
-FRONTEND_IMAGE=${mydockerimage}:frontend_${BUILD_NUMBER}
-BACKEND_IMAGE=${mydockerimage}:backend_${BUILD_NUMBER}
-            """
-            sh "cat compose.env"
+                dir('ansible') {
+                    withCredentials([sshUserPrivateKey(
+                        credentialsId: 'deployment-ssh-key',
+                        keyFileVariable: 'SSH_KEY'
+                    )]) {
+                        sh """
+                        ansible-playbook deploy-playbook.yml \
+                          -e "build_number=${BUILD_NUMBER}" \
+                          --private-key ${SSH_KEY}
+                        """
+                    }
                 }
-            }
-        }
-        // stage('Write Frontend .env') {
-        //     agent { label 'deployment' }
-        //     steps {
-        //         writeFile file: './FrontEnd/.env', text: "REACT_APP_API_URL=http://192.168.56.152:5000"
-        //         sh "cat ./FrontEnd/.env"
-        //     }
-        // }
-        stage('Deploying container in deploying node ') {
-            agent {label "deployment"}
-            steps {
-                echo 'Running a Development environment'
-                sh '''
-                docker compose --env-file compose.env down || true
-                docker compose --env-file compose.env pull
-                docker compose --env-file compose.env up -d
-                '''
             }
         }
     }

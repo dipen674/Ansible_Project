@@ -1,0 +1,6 @@
+---
+# Default variables (can be overridden)
+workspace: "/opt/app"
+docker_registry: "harbor.registry.local"
+project_namespace: "jenkins"
+image_name: "mylocalimage"

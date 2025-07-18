@@ -1,0 +1,8 @@
+---
+- name: Deploy application to target server
+  hosts: deployment
+  become: yes
+  roles:
+    - role: app_deployer
+  vars:
+    build_number: "{{ build_number }}"

@@ -1,0 +1,4 @@
+---
+# Role-specific variables
+compose_file: "compose.yaml"
+env_file: "compose.env"
