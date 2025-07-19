@@ -67,7 +67,7 @@ pipeline {
 
     post {
         always {
-            node('deployment') {
+            node('production') {
                 script {
                     sh '''
                     echo "Removing dangling images..."
