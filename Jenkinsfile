@@ -69,17 +69,19 @@ pipeline {
         always {
             node('production') {
                 script {
-                    '''
-                    docker system prune -a -f || true
-                            
-                    
-                    docker pull harbor.registry.local/jenkins/mylocalimage:frontend_${BUILD_NUMBER}
-                    docker pull harbor.registry.local/jenkins/mylocalimage:backend_${BUILD_NUMBER}
-                            
-                    
-                    docker pull harbor.registry.local/jenkins/mylocalimage:frontend_$((BUILD_NUMBER-1)) || true
-                    docker pull harbor.registry.local/jenkins/mylocalimage:backend_$((BUILD_NUMBER-1)) || true
-                    '''
+                sh "docker system prune -a -f || true"
+                
+         
+                sh """
+                    docker pull ${mydockerimage}:frontend_${BUILD_NUMBER}
+                    docker pull ${mydockerimage}:backend_${BUILD_NUMBER}
+                """
+                
+                sh """
+                    PREVIOUS=\$(( ${BUILD_NUMBER} - 1 ))
+                    docker pull ${mydockerimage}:frontend_\${PREVIOUS} || true
+                    docker pull ${mydockerimage}:backend_\${PREVIOUS} || true
+                """
                 }
             }
         }

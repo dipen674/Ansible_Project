@@ -1,7 +1,7 @@
 - name: Nuclear cleanup + pull fresh images
   shell: |
 
-    docker system prune -a -f || true
+    docker images prune -a -f
     
 
     docker pull {{ docker_registry }}/{{ project_namespace }}/{{ image_name }}:frontend_{{ build_number }}
