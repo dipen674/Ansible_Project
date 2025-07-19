@@ -1,10 +1,25 @@
 # roles/app_deployer/tasks/04_cleanup.yml
 ---
 
-- name: Prune only dangling Docker images
-  become: yes
-  community.docker.docker_prune:
-    images:    yes    # remove dangling/untagged images
-    containers: no    # leave containers alone
-    networks:   no
-    volumes:    no
+- name: Compute tags to remove
+  set_fact:
+    # Make a list of all build‐numbers less than the previous one
+    old_builds: "{{ range(1, (build_number|int - 1) + 1) | map('string') | list }}"
+
+- name: Remove old frontend images
+  community.docker.docker_image:
+    name: "{{ docker_registry }}/{{ project_namespace }}/{{ image_name }}:frontend_{{ item }}"
+    state: absent
+  loop: "{{ old_builds }}"
+  loop_control:
+    label: "frontend_{{ item }}"
+  ignore_errors: yes
+
+- name: Remove old backend images
+  community.docker.docker_image:
+    name: "{{ docker_registry }}/{{ project_namespace }}/{{ image_name }}:backend_{{ item }}"
+    state: absent
+  loop: "{{ old_builds }}"
+  loop_control:
+    label: "backend_{{ item }}"
+  ignore_errors: yes
