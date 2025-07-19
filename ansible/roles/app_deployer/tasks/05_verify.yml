@@ -1,6 +1,24 @@
----
-- name: Verify frontend health
-  ansible.builtin.wait_for:
-    host: localhost
-    port: 3000
-    timeout: 60
+- name: Verify container health
+  block:
+    - name: Verify frontend health
+      ansible.builtin.wait_for:
+        host: localhost
+        port: 3000  # Frontend port
+        timeout: 60
+        msg: "Frontend service failed to start"
+
+    - name: Verify backend health
+      ansible.builtin.wait_for:
+        host: localhost
+        port: 5000  # Backend API port (adjust as needed)
+        timeout: 60
+        msg: "Backend service failed to start"
+
+    - name: Verify MongoDB health
+      ansible.builtin.wait_for:
+        host: localhost
+        port: 27017  # MongoDB default port
+        timeout: 120  # MongoDB may need longer startup
+        msg: "MongoDB service failed to start"
+  tags:
+    - healthcheck

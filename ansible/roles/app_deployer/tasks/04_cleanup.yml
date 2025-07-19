@@ -1,18 +1,10 @@
-- name: Debug build number
-  debug:
-    msg: "Build number is {{ build_number }}"
+# roles/app_deployer/tasks/04_cleanup.yml
+---
 
-- name: Nuclear cleanup + pull fresh images
-  shell: |
-
-    docker images prune -a -f
-    
-
-    docker pull {{ docker_registry }}/{{ project_namespace }}/{{ image_name }}:frontend_{{ build_number }}
-    docker pull {{ docker_registry }}/{{ project_namespace }}/{{ image_name }}:backend_{{ build_number }}
-    
-
-    docker pull {{ docker_registry }}/{{ project_namespace }}/{{ image_name }}:frontend_{{ build_number|int - 1 }} || true
-    docker pull {{ docker_registry }}/{{ project_namespace }}/{{ image_name }}:backend_{{ build_number|int - 1 }} || true
-  args:
-    executable: /bin/bash
+- name: Prune only dangling Docker images
+  community.docker.docker_prune:
+    images:   yes      # remove dangling (untagged) images
+    containers: no
+    networks:   no
+    volumes:    no
+  become: yes         # or remove if your ansible user is in the docker group

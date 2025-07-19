@@ -4,3 +4,10 @@ workspace: "/opt/app"
 docker_registry: "harbor.registry.local"
 project_namespace: "jenkins"
 image_name: "mylocalimage"
+
+prev_build: "{{ (build_number | int) - 1 }}"
+
+
+# Computing Image tags
+frontend_image: "{{ docker_registry }}/{{ project_namespace }}/{{ image_name }}:frontend_{{ build_number }}"
+backend_image: "{{ docker_registry }}/{{ project_namespace }}/{{ image_name }}:backend_{{ build_number }}"
