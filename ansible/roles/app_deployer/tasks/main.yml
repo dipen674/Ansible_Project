@@ -12,6 +12,10 @@
   import_tasks: 03_deploy.yml
   tags: deploy
 
+- name: Debug build number
+  debug:
+    msg: "Build number is {{ build_number }}"
+
 - name: Clean up old images
   import_tasks: 04_cleanup.yml
   tags: cleanup

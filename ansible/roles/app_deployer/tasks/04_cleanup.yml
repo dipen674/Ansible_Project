@@ -1,3 +1,7 @@
+- name: Debug build number
+  debug:
+    msg: "Build number is {{ build_number }}"
+
 - name: Nuclear cleanup + pull fresh images
   shell: |
 
