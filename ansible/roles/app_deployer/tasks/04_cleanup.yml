@@ -2,7 +2,8 @@
 ---
 
 - name: Prune only dangling Docker images
-  become: yes                     # ensure docker permissions
+  become: yes
   shell: docker image prune -f
+  warn: false          
   args:
-    warn: false                   # suppress deprecation warnings
+    executable: /bin/bash
