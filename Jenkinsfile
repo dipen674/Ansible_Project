@@ -1,5 +1,10 @@
 pipeline {
-    agent none
+    // agent none
+
+    triggers {
+
+        githubPush()
+    }
 
     environment {
         mydockerimage = "harbor.registry.local/jenkins/mylocalimage"
