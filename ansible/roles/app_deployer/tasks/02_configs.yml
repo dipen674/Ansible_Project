@@ -1,0 +1,10 @@
+---
+- name: Copy Docker compose file
+  ansible.builtin.copy:
+    src: "/home/vagrant/project/compose.yaml"
+    dest: "{{ workspace }}/{{ compose_file }}"
+
+- name: Create environment file
+  ansible.builtin.template:
+    src: "compose.env.j2"
+    dest: "{{ workspace }}/{{ env_file }}"

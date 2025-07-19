@@ -1,0 +1,10 @@
+---
+- name: Pull latest images
+  ansible.builtin.command: "docker compose --env-file {{ env_file }} pull"
+  args:
+    chdir: "{{ workspace }}"
+
+- name: Deploy application
+  ansible.builtin.command: "docker compose --env-file {{ env_file }} up -d"
+  args:
+    chdir: "{{ workspace }}"

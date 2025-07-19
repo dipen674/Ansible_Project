@@ -1,32 +1,21 @@
+# SPDX-License-Identifier: MIT-0
 ---
-- name: Ensure workspace directory exists
-  file:
-    path: "{{ workspace }}"
-    state: directory
-    mode: 0755
+- name: Prepare deployment workspace
+  import_tasks: 01_setup.yml
+  tags: setup
 
-- name: Copy Docker compose file
-  copy:
-    src: "/home/vagrant/project/compose.yaml"
-    dest: "{{ workspace }}/{{ compose_file }}"
+- name: Handle configuration files
+  import_tasks: 02_configs.yml
+  tags: configs
 
-- name: Create environment file
-  template:
-    src: "compose.env.j2"
-    dest: "{{ workspace }}/{{ env_file }}"
+- name: Deploy containers
+  import_tasks: 03_deploy.yml
+  tags: deploy
 
-- name: Pull latest images
-  command: "docker compose --env-file {{ env_file }} pull"
-  args:
-    chdir: "{{ workspace }}"
+- name: Clean up old images
+  import_tasks: 04_cleanup.yml
+  tags: cleanup
 
-- name: Deploy application
-  command: "docker compose --env-file {{ env_file }} up -d"
-  args:
-    chdir: "{{ workspace }}"
-
-- name: Verify frontend health
-  wait_for:
-    host: localhost
-    port: 3000
-    timeout: 60
+- name: Verify deployment
+  import_tasks: 05_verify.yml
+  tags: verify
