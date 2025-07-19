@@ -107,10 +107,9 @@ pipeline {
                     Please go through the following URL and verify the details:  
                     $BUILD_URL
 
-                    Regards,  
+                    Best Regards,  
                     DevOps Team
                     """
-                }
-            }       
-    }
+                }   
+        }       
 }
