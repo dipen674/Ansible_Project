@@ -69,10 +69,11 @@ pipeline {
         always {
             node('production') {
                 script {
-                    sh '''
-                    echo "Removing dangling images..."
-                    docker image prune -a -f
-                    '''
+                    sh """
+                    echo "Cleaning up old images..."
+                    # Remove all images older than 1 hour except those with current tags
+                    docker image prune -a -f --filter "until=30h"
+                """
                 }
             }
         }
