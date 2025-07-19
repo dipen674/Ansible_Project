@@ -56,6 +56,7 @@ pipeline {
                                 https://github.com/dipen674/Ansible_Project.git /home/vagrant/project
                             source /home/vagrant/myenv/bin/activate
                             cd /home/vagrant/project/ansible &&
+                            ansible-galaxy collection install community.docker
                             ansible-playbook deploy-playbook.yaml -i inventory.ini -e "build_number=${BUILD_NUMBER}"
                         '
                         """
