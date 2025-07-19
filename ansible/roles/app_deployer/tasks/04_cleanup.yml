@@ -1,0 +1,11 @@
+- name: Remove old Docker images
+  shell: |
+    echo "Cleaning images except build {{ build_number }}"
+    docker images --filter=reference='harbor.registry.local/jenkins/mylocalimage:*' --format '{{.Repository}}:{{.Tag}}' \
+      | grep -v "frontend_{{ build_number }}\$" \
+      | grep -v "backend_{{ build_number }}\$" \
+      | xargs -r docker rmi -f 2>/dev/null || echo "No images removed"
+  args:
+    executable: /bin/bash
+  register: cleanup_result
+  changed_when: "'deleted' in cleanup_result.stdout"
