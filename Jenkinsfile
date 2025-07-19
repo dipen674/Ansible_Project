@@ -69,13 +69,14 @@ pipeline {
         always {
             node('production') {
                 script {
-                    sh '''
-                        echo "Cleaning up old Docker images..."
-                        docker images --filter=reference="harbor.registry.local/jenkins/mylocalimage:*" --format "{{.Repository}}:{{.Tag}}" \
-                            | grep -v "frontend_'${BUILD_NUMBER}'\\$" \
-                            | grep -v "backend_'${BUILD_NUMBER}'\\$" \
-                            | xargs -r docker rmi -f 2>/dev/null || echo "No images to remove"
-                        '''
+
+        sh """
+                echo "Cleaning up old Docker images for build ${BUILD_NUMBER}"
+                docker images --filter=reference='harbor.registry.local/jenkins/mylocalimage:*' --format '{{.Repository}}:{{.Tag}}' \\
+                  | grep -v "frontend_${BUILD_NUMBER}\\\\$" \\
+                  | grep -v "backend_${BUILD_NUMBER}\\\\$" \\
+                  | xargs -r docker rmi -f 2>/dev/null || echo "No matching images to remove iamges"
+                """
                 }
             }
         }
