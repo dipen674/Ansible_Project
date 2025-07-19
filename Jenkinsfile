@@ -70,12 +70,12 @@ pipeline {
             node('production') {
                 script {
 
-        sh """
+        sh """#!/bin/bash
                 echo "Cleaning up old Docker images for build ${BUILD_NUMBER}"
                 docker images --filter=reference='harbor.registry.local/jenkins/mylocalimage:*' --format '{{.Repository}}:{{.Tag}}' \\
-                  | grep -v "frontend_${BUILD_NUMBER}\\\\$" \\
-                  | grep -v "backend_${BUILD_NUMBER}\\\\$" \\
-                  | xargs -r docker rmi -f 2>/dev/null || echo "No matching images to remove iamges"
+                  | grep -v "frontend_${BUILD_NUMBER}\\$" \\
+                  | grep -v "backend_${BUILD_NUMBER}\\$" \\
+                  | xargs -r docker rmi -f 2>/dev/null || echo "No matching images to remove"
                 """
                 }
             }
