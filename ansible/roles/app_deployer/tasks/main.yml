@@ -7,7 +7,7 @@
 
 - name: Copy Docker compose file
   copy:
-    src: "../../compose.yaml"
+    src: "/home/vagrant/project/compose.yaml"
     dest: "{{ workspace }}/{{ compose_file }}"
 
 - name: Create environment file
