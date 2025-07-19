@@ -63,7 +63,6 @@ pipeline {
     }
 }
 }
-    }
     post {
             always {
             node('deployment') {
@@ -112,4 +111,5 @@ pipeline {
                     """
                 }   
         }       
+    }
 }
