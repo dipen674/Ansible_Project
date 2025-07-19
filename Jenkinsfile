@@ -47,23 +47,24 @@ pipeline {
                     credentialsId: 'ansible-ssh-key',
                     keyFileVariable: 'ANSIBLE_KEY'
                 )]) {
-            sh """
-            ssh -i "/var/lib/jenkins/keys/id_rsa" -o StrictHostKeyChecking=no vagrant@192.168.56.210
-                # 1. REMOVE OLD DIRECTORY (if exists)
-                sudo -u vagrant rm -rf /home/vagrant/project
-                
-                # 2. CREATE FRESH DIRECTORY
-                sudo -u vagrant mkdir -p /home/vagrant/project
-                
-                # 3. CLONE FRESH COPY
-                sudo -u vagrant git clone --single-branch --branch develop \\
-                    https://github.com/dipen674/Ansible_Project.git /home/vagrant/project
-                
-                # 4. DEPLOY
-                source /home/vagrant/myenv/bin/activate
-                cd /home/vagrant/project/ansible &&
-                sudo -u vagrant ansible-playbook deploy-playbook.yaml -i inventory.ini -e "build_number=${BUILD_NUMBER}"
-            """
+                    sh """
+                    ssh -i "/var/lib/jenkins/keys/id_rsa" -o StrictHostKeyChecking=no vagrant@192.168.56.210 << 'ENDSSH'
+                        # 1. REMOVE OLD DIRECTORY
+                        sudo -u vagrant rm -rf /home/vagrant/project
+                        
+                        # 2. CREATE FRESH DIRECTORY
+                        sudo -u vagrant mkdir -p /home/vagrant/project
+                        
+                        # 3. CLONE FRESH COPY
+                        sudo -u vagrant git clone --single-branch --branch develop \\
+                            https://github.com/dipen674/Ansible_Project.git /home/vagrant/project
+                        
+                        # 4. DEPLOY
+                        source /home/vagrant/myenv/bin/activate
+                        cd /home/vagrant/project/ansible &&
+                        sudo -u vagrant ansible-playbook deploy-playbook.yaml -i inventory.ini -e "build_number=${BUILD_NUMBER}"
+                    ENDSSH
+                    """
                 }
             }
         }
