@@ -76,12 +76,6 @@ pipeline {
                     docker pull ${mydockerimage}:frontend_${BUILD_NUMBER}
                     docker pull ${mydockerimage}:backend_${BUILD_NUMBER}
                 """
-                
-                sh """
-                    PREVIOUS=\$(( ${BUILD_NUMBER} - 1 ))
-                    docker pull ${mydockerimage}:frontend_\${PREVIOUS} || true
-                    docker pull ${mydockerimage}:backend_\${PREVIOUS} || true
-                """
                 }
             }
         }
