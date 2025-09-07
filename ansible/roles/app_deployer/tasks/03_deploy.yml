@@ -1,14 +1,8 @@
----
-- name: Pull and deploy Docker images
-  community.docker.docker_compose_v2:
-    project_src: "{{ workspace }}"       # directory with docker-compose.yml
-    pull: yes
-    up: yes
-    detached: yes
-    login:
-      username: "admin"
-      password: "Harbor12345"
-
+- name: Login to Docker registry
+  community.docker.docker_login:
+    username: "admin"
+    password: "Harbor12345"
+    registry: "your-registry-url"  # Add your registry URL if not Docker Hub
 
 - name: Pull latest images
   command: "docker compose --env-file {{ env_file }} pull"
