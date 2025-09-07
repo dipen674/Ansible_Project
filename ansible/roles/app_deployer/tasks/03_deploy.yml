@@ -1,6 +1,5 @@
 - name: Login to Docker registry using command (on target VM)
   command: "docker login -u admin -p Harbor12345 harbor.registry.local"
-  no_log: true
 
 - name: Pull latest images
   command: "docker compose --env-file {{ env_file }} pull"
