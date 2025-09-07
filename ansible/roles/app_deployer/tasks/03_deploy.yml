@@ -1,4 +1,15 @@
 ---
+- name: Pull and deploy Docker images
+  community.docker.docker_compose:
+    project_src: "{{ workspace }}"       # must point to your compose directory
+    pull: yes
+    up: yes
+    detached: yes
+    docker_host: unix://var/run/docker.sock
+    login:
+      username: "admin"                  # ok for now
+      password: "Harbor12345"            # ok for now
+
 - name: Pull latest images
   command: "docker compose --env-file {{ env_file }} pull"
   args:
