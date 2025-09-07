@@ -1,8 +1,6 @@
-- name: Login to Docker registry
-  community.docker.docker_login:
-    username: "admin"
-    password: "Harbor12345"
-    registry: "192.168.56.220"  # Add your registry URL if not Docker Hub
+- name: Login to Docker registry using command (on target VM)
+  command: "docker login -u admin -p Harbor12345 192.168.56.220"
+  no_log: true
 
 - name: Pull latest images
   command: "docker compose --env-file {{ env_file }} pull"
