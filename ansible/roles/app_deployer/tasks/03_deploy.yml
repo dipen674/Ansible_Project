@@ -1,14 +1,14 @@
 ---
 - name: Pull and deploy Docker images
-  community.docker.docker_compose:
-    project_src: "{{ workspace }}"       # must point to your compose directory
+  community.docker.docker_compose_v2:
+    project_src: "{{ workspace }}"       # directory with docker-compose.yml
     pull: yes
     up: yes
     detached: yes
-    docker_host: unix://var/run/docker.sock
     login:
-      username: "admin"                  # ok for now
-      password: "Harbor12345"            # ok for now
+      username: "admin"
+      password: "Harbor12345"
+
 
 - name: Pull latest images
   command: "docker compose --env-file {{ env_file }} pull"
