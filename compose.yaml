@@ -1,15 +1,17 @@
 services:
   frontend:
-    image: "${FRONTEND_IMAGE}"
+    build: ./FrontEnd
     ports:
       - "3000:80"
     networks:
       - mynetwork
 
   backend:
-    image: "${BACKEND_IMAGE}"  
+    build: ./BackEnd 
     depends_on:
       - mongodb
+    env_file:
+      - ./BackEnd/config.env
     ports:
       - "5000:5000"
     networks:

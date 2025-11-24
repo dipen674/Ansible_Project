@@ -6,14 +6,15 @@ RUN npm install
 
 COPY . .
 
-
 RUN npm run build
 
 FROM nginx:alpine
 
+# *** ADD THIS LINE ***
+# Copy the custom config file to override Nginx's default
+COPY nginx.conf /etc/nginx/conf.d/default.conf 
 
 COPY --from=builder /app/build /usr/share/nginx/html
-
 
 EXPOSE 80
 
