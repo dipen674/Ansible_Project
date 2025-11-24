@@ -57,7 +57,7 @@ pipeline {
                             source /home/vagrant/myenv/bin/activate
                             cd /home/vagrant/project/ansible &&
                             ansible-galaxy collection install community.docker
-                            ansible-playbook deploy-playbook.yaml -i inventory.ini -e "build_number=${BUILD_NUMBER}"
+                            ansible-playbook deploy-playbook.yaml -i inventory -e "build_number=${BUILD_NUMBER}"
                         '
                         """
                 }
@@ -75,12 +75,6 @@ pipeline {
                 sh """
                     docker pull ${mydockerimage}:frontend_${BUILD_NUMBER}
                     docker pull ${mydockerimage}:backend_${BUILD_NUMBER}
-                """
-                
-                sh """
-                    PREVIOUS=\$(( ${BUILD_NUMBER} - 1 ))
-                    docker pull ${mydockerimage}:frontend_\${PREVIOUS} || true
-                    docker pull ${mydockerimage}:backend_\${PREVIOUS} || true
                 """
                 }
             }

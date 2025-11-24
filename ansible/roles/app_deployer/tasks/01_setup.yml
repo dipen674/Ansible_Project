@@ -1,6 +1,6 @@
 ---
 - name: Ensure workspace directory exists
-  ansible.builtin.file:
+  file:
     path: "{{ workspace }}"
     state: directory
     mode: 0755
